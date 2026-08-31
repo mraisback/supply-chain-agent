@@ -1,0 +1,59 @@
+# Domain model parameters and formulas
+
+FORECASTING:
+  MAPE_CALCULATION: "Mean Absolute Percentage Error = mean(|actual - forecast| / |actual|)"
+  WMAPE_CALCULATION: "Weighted MAPE = sum(weights * |actual - forecast|) / sum(weights * actual)"
+  BIAS_CALCULATION: "Bias = mean(forecast - actual)"
+  SEASONALITY_DECOMPOSITION: "Using additive model: Y = T + S + E"
+  FORECAST_INTERVALS: [0.68, 0.95, 0.99]  # 1-sigma, 2-sigma, 3-sigma
+
+INVENTORY:
+  EOQ_FORMULA: "EOQ = sqrt((2 * D * S) / H)"
+  REORDER_POINT: "ROP = (avg_demand * lead_time) + safety_stock"
+  SAFETY_STOCK: "SS = Z * sqrt((LT * σ_d²) + (d_avg² * σ_lt²))"
+  SERVICE_LEVEL_Z_SCORES:
+    0.90: 1.28
+    0.95: 1.645
+    0.99: 2.326
+    0.999: 3.09
+  INVENTORY_TURNS: "Annual demand / Average inventory"
+  HOLDING_COST_COMPONENTS:
+    - Storage space
+    - Insurance
+    - Obsolescence
+    - Financing cost
+
+OPTIMIZATION:
+  NEWSVENDOR_MODEL: "Optimal order qty = mean_demand + Z * std_dev, where Z = understocking_cost / (understocking_cost + overstocking_cost)"
+  NETWORK_OPTIMIZATION: "MILP model minimizing (facility_costs + transportation_costs) subject to service level"
+  CROSS_DOCKING: "Reduces inventory carrying cost, increases complexity"
+
+SEGMENTATION:
+  ABC_CLASSIFICATION:
+    A: "20% of SKUs, 80% of value - high attention"
+    B: "30% of SKUs, 15% of value - standard control"
+    C: "50% of SKUs, 5% of value - minimal control"
+  XYZ_CLASSIFICATION:
+    X: "Predictable, stable demand (CV < 0.25)"
+    Y: "Moderate variability (0.25 <= CV < 1.0)"
+    Z: "Erratic, unpredictable demand (CV >= 1.0)"
+  STRATEGY_MATRIX:
+    AX: "Automated replenishment, low safety stock"
+    AY: "Regular monitoring, moderate safety stock"
+    AZ: "Close monitoring, high safety stock, dual sourcing"
+    BX: "Standard controls, low safety stock"
+    BY: "Standard controls, moderate safety stock"
+    BZ: "Periodic review, higher safety stock"
+    CX: "Minimal controls, occasional review"
+    CY: "Minimal controls, standard safety stock"
+    CZ: "Minimal controls, high safety stock, pool inventory"
+
+RISK:
+  SUPPLIER_RISK_SCORE: "Weighted combination of quality, reliability, cost, concentration risks"
+  BULLWHIP_EFFECT: "Ratio = Variance(orders) / Variance(demand). Ratio > 1.2 indicates high amplification"
+  RESILIENCE_FACTORS:
+    - Supplier reliability
+    - Inventory buffer
+    - Network redundancy
+    - Supplier diversity
+  DUAL_SOURCING_BREAKEVEN: "Expected disruption cost > Dual sourcing incremental cost"
